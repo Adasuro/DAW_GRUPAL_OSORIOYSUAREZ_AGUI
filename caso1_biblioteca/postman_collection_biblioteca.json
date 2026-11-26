@@ -1,0 +1,119 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-uncp-biblio-2026",
+    "name": "Caso 1 - API Biblioteca Central UNCP",
+    "description": "Colección de pruebas para la API RESTful de Biblioteca Universitaria UNCP (Semana 13 - Suárez & Osorio).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://127.0.0.1:8000" },
+    { "key": "token_biblio", "value": "" },
+    { "key": "token_admin", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth - Obtener Token (Bibliotecario)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"bibliotecario1\",\n  \"password\": \"BiblioUNCP2026!\"\n}"
+        },
+        "url": { "raw": "{{base_url}}/api/auth/token/", "host": ["{{base_url}}"], "path": ["api", "auth", "token", ""] }
+      }
+    },
+    {
+      "name": "Libros - Listar catálogo paginado (20/pág)",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{base_url}}/api/libros/", "host": ["{{base_url}}"], "path": ["api", "libros", ""] }
+      }
+    },
+    {
+      "name": "Libros - Filtrar ingeniería, año >= 2020 y disponible",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/api/libros/?categoria=ingenieria&año__gte=2020&disponible=true",
+          "host": ["{{base_url}}"],
+          "path": ["api", "libros", ""],
+          "query": [
+            { "key": "categoria", "value": "ingenieria" },
+            { "key": "año__gte", "value": "2020" },
+            { "key": "disponible", "value": "true" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Libros - Búsqueda y ordenamiento",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/api/libros/?search=algoritmos&ordering=-año",
+          "host": ["{{base_url}}"],
+          "path": ["api", "libros", ""],
+          "query": [
+            { "key": "search", "value": "algoritmos" },
+            { "key": "ordering", "value": "-año" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Libros - Crear libro (Bibliotecario/Admin)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Token {{token_biblio}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"isbn\": \"978-612-9999-01\",\n  \"titulo\": \"Arquitectura RESTful con Django\",\n  \"autor_id\": 1,\n  \"editorial\": \"Fondo Editorial UNCP\",\n  \"anio\": 2026,\n  \"categoria\": \"ingenieria\",\n  \"stock\": 10,\n  \"ubicacion\": \"Estante A-01 / Piso 1\"\n}"
+        },
+        "url": { "raw": "{{base_url}}/api/libros/", "host": ["{{base_url}}"], "path": ["api", "libros", ""] }
+      }
+    },
+    {
+      "name": "Préstamos - Registrar préstamo",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Token {{token_biblio}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"usuario\": 3,\n  \"libro\": 1,\n  \"fecha_devolucion\": \"2026-12-10\"\n}"
+        },
+        "url": { "raw": "{{base_url}}/api/prestamos/", "host": ["{{base_url}}"], "path": ["api", "prestamos", ""] }
+      }
+    },
+    {
+      "name": "Préstamos - Marcar como devuelto (@action)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Authorization", "value": "Token {{token_biblio}}" }],
+        "url": { "raw": "{{base_url}}/api/prestamos/1/devolver/", "host": ["{{base_url}}"], "path": ["api", "prestamos", "1", "devolver", ""] }
+      }
+    },
+    {
+      "name": "Préstamos - Listar vencidos (@action)",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Token {{token_biblio}}" }],
+        "url": { "raw": "{{base_url}}/api/prestamos/vencidos/", "host": ["{{base_url}}"], "path": ["api", "prestamos", "vencidos", ""] }
+      }
+    },
+    {
+      "name": "Usuarios - Perfil autenticado (@action)",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Token {{token_biblio}}" }],
+        "url": { "raw": "{{base_url}}/api/usuarios/perfil/", "host": ["{{base_url}}"], "path": ["api", "usuarios", "perfil", ""] }
+      }
+    }
+  ]
+}
