@@ -1,0 +1,133 @@
+{
+  "info": {
+    "_postman_id": "e5f6g7h8-tecnomarket-2026",
+    "name": "Caso 2 - API TecnoMarket Perú E-Commerce",
+    "description": "Colección de pruebas para la API RESTful de TecnoMarket Perú (Semana 13 - Suárez & Osorio).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://127.0.0.1:8001" },
+    { "key": "token_cliente", "value": "" },
+    { "key": "jwt_access", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth - Obtener Token DRF (Cliente)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"cliente1\",\n  \"password\": \"ClienteTecno2026!\"\n}"
+        },
+        "url": { "raw": "{{base_url}}/api/auth/token/", "host": ["{{base_url}}"], "path": ["api", "auth", "token", ""] }
+      }
+    },
+    {
+      "name": "Auth - Obtener JWT (Mobile)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"cliente1\",\n  \"password\": \"ClienteTecno2026!\"\n}"
+        },
+        "url": { "raw": "{{base_url}}/api/auth/jwt/token/", "host": ["{{base_url}}"], "path": ["api", "auth", "jwt", "token", ""] }
+      }
+    },
+    {
+      "name": "Productos - Catálogo filtrado (Dell Laptops 500-2000)",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/api/productos/?categoria=laptops&marca=dell&precio_min=500&precio_max=2000&disponible=true",
+          "host": ["{{base_url}}"],
+          "path": ["api", "productos", ""],
+          "query": [
+            { "key": "categoria", "value": "laptops" },
+            { "key": "marca", "value": "dell" },
+            { "key": "precio_min", "value": "500" },
+            { "key": "precio_max", "value": "2000" },
+            { "key": "disponible", "value": "true" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Productos - Búsqueda full-text y ordenamiento",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/api/productos/?search=gaming laptop&ordering=-precio",
+          "host": ["{{base_url}}"],
+          "path": ["api", "productos", ""],
+          "query": [
+            { "key": "search", "value": "gaming laptop" },
+            { "key": "ordering", "value": "-precio" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Carrito - Ver carrito actual",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Token {{token_cliente}}" }],
+        "url": { "raw": "{{base_url}}/api/carrito/", "host": ["{{base_url}}"], "path": ["api", "carrito", ""] }
+      }
+    },
+    {
+      "name": "Carrito - Agregar producto con cupón",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Token {{token_cliente}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"producto_id\": 1,\n  \"cantidad\": 1,\n  \"cupon\": \"CYBERWOW10\"\n}"
+        },
+        "url": { "raw": "{{base_url}}/api/carrito/agregar/", "host": ["{{base_url}}"], "path": ["api", "carrito", "agregar", ""] }
+      }
+    },
+    {
+      "name": "Carrito - Checkout (Generar Orden)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Token {{token_cliente}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"direccion_envio\": \"Av. Arequipa 1540, Lima\",\n  \"metodo_pago\": \"culqi\",\n  \"cupon\": \"CYBERWOW10\"\n}"
+        },
+        "url": { "raw": "{{base_url}}/api/carrito/checkout/", "host": ["{{base_url}}"], "path": ["api", "carrito", "checkout", ""] }
+      }
+    },
+    {
+      "name": "Órdenes - Mis órdenes (@action)",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Token {{token_cliente}}" }],
+        "url": { "raw": "{{base_url}}/api/ordenes/mis-ordenes/", "host": ["{{base_url}}"], "path": ["api", "ordenes", "mis-ordenes", ""] }
+      }
+    },
+    {
+      "name": "Reseñas - Crear reseña verificada",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Token {{token_cliente}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"producto\": 1,\n  \"calificacion\": 5,\n  \"titulo\": \"Excelente laptop gaming\",\n  \"comentario\": \"Llegó rápido y cumple con todo.\"\n}"
+        },
+        "url": { "raw": "{{base_url}}/api/resenas/", "host": ["{{base_url}}"], "path": ["api", "resenas", ""] }
+      }
+    }
+  ]
+}
