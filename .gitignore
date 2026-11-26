@@ -1,0 +1,35 @@
+# Python & Virtual Environment
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Django
+*.sqlite3
+db.sqlite3
+db.sqlite3-journal
+*.log
+media/
+staticfiles/
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Environment variables
+.env
+.env.local
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Evidencias temporales / Informe generado localmente
+evidencias/
+*.pdf
+!Guia_Practica_Semana_13_-_Grupal.pdf
